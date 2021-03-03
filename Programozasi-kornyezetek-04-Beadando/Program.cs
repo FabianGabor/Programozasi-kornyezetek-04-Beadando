@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using System.Text;
 
 namespace Programozasi_kornyezetek_04_Beadando {
     // 1. Felsorolás típus segítségével állapítsuk meg egy bekért pontszámról, hogy az melyik magyarkártya-lapnak felel
@@ -251,18 +252,52 @@ namespace Programozasi_kornyezetek_04_Beadando {
                    "Ar:       " + Ar + "\n";
         }
     }
-
+    
     internal class Program {
         public static void Main(string[] args) {
-            //Kartya.RunKartya();
-            //Ceg.RunCeg();
-            Kerekpar kerekpar0 = new Kerekpar(Kerekpar.Vazmeretek._18, Kerekpar.Markak.Merida);
-            Kerekpar kerekpar1 = new Kerekpar(Kerekpar.Vazmeretek._16, "Specialized");
+            Kartya.RunKartya();
+            Ceg.RunCeg();
+            
+            Kerekpar kerekpar0 = new Kerekpar(Kerekpar.Vazmeretek._18, Kerekpar.Markak.Merida);  //  enum-ból
+            Kerekpar kerekpar1 = new Kerekpar(Kerekpar.Vazmeretek._16, "Specialized");           // stringként. Ellenőrzi, hogy szerepel-e enum-ban
             Kerekpar2 kerekpar2 = new Kerekpar2(Kerekpar2.Vazmeretek._14, Kerekpar2.Markak.Cannondale);
             
             Console.WriteLine(kerekpar0.ToString());
             Console.WriteLine(kerekpar1.ToString());
             Console.WriteLine(kerekpar2.ToString());
+            
+            // 4. Program segítségével derítsd ki, hogy a StringBuilder osztály hogyan (milyen algoritmus szerint)
+            // növeli a kapacitását, ha szüksége van rá!
+            StringBuilder sb = new StringBuilder("");
+            // internal const int DefaultCapacity = 16;
+            int n = 10;
+            int exp = 0;
+            int sbSize = 0;
+
+            for (int i = 0; i < 16 * Math.Pow(2, n-1); i++) {
+                if (sbSize != sb.Capacity) {
+                    sbSize = sb.Capacity;
+                    exp++;
+                    Console.WriteLine("[" + exp.ToString("D2") + "] Current StringBuilder capacity: " + sbSize.ToString("D4") + " = " + "2^" + (exp+3));
+                }
+                // sb.Append()-re egy breakpoint és Step Into (StringBuilder.cs)
+                sb.Append('*'); // public StringBuilder Append(char value)
+                //sb.Append("****"); // public unsafe StringBuilder Append(string value) // unsafe a pointerek miatt
+
+                /* https://github.com/microsoft/referencesource/blob/master/mscorlib/system/text/stringbuilder.cs#L634
+                 * public unsafe StringBuilder Append(string value) // string esetén
+                 * attól függően, hogy a string hosszabb-e, mint 2 karakter vagy sem, értékátadással vagy pointerekkel
+                 * történik a másolás
+                 *
+                 * https://github.com/microsoft/referencesource/blob/master/mscorlib/system/text/stringbuilder.cs#L1962
+                 * private void ExpandByABlock(int minBlockCharCount)
+                 * Append kapacitás bővítés esetén lefoglal egy legalább ugyanakkora memóriaterületet, mint a már létező
+                 * StringBuilder mérete, amely alap esetben 16 byte, ez mindig duplázódik
+                 *
+                 * StringBuilder használata esetén a különböző block-ok, amelyek a karaktereket tárolják, nem lesznek
+                 * feltétlenül egymás után, de ezt megoldják a pointerek.
+                 */
+            }
         }
     }
 }
