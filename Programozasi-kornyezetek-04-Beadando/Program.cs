@@ -215,12 +215,52 @@ namespace Programozasi_kornyezetek_04_Beadando {
         }
     }
 
+    public readonly struct Kerekpar2 {
+        public enum Vazmeretek { _12 = 12, _14 = 14, _16 = 16, _18 = 18, _20 = 20 };
+
+        public enum Markak { Cannondale, Trek, Giant, Specialized, Merida, Scott};
+
+        private Vazmeretek Vazmeret { get; }
+
+        private Markak Marka { get; }
+
+        private int Ar { get; }
+        
+        private static int SetAr(Markak marka) {
+            switch (marka) {
+                case Markak.Cannondale: { return 300000; }
+                case Markak.Trek: { return 250000; }
+                case Markak.Giant: { return 220000; }
+                case Markak.Specialized: { return 270000; }
+                case Markak.Merida: { return 260000; }
+                case Markak.Scott: { return 280000; }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(marka), marka, "Nem valaszthato marka!");
+            }
+        }
+
+        public Kerekpar2(Vazmeretek vazmeret, Markak marka) : this() {
+            Vazmeret = vazmeret;
+            Marka = marka;
+            Ar = SetAr(Marka);
+        }
+
+        public override string ToString() {
+            return "Marka:    " + Marka + "\n" +
+                   "Vazmeret: " + (int) Vazmeret + "\n" +
+                   "Ar:       " + Ar + "\n";
+        }
+    }
+
     internal class Program {
         public static void Main(string[] args) {
             //Kartya.RunKartya();
             //Ceg.RunCeg();
-            Kerekpar kerekpar1 = new Kerekpar(Kerekpar.Vazmeretek._18, Kerekpar.Markak.Merida);
-            Kerekpar kerekpar2 = new Kerekpar(Kerekpar.Vazmeretek._16, "Specialized");
+            Kerekpar kerekpar0 = new Kerekpar(Kerekpar.Vazmeretek._18, Kerekpar.Markak.Merida);
+            Kerekpar kerekpar1 = new Kerekpar(Kerekpar.Vazmeretek._16, "Specialized");
+            Kerekpar2 kerekpar2 = new Kerekpar2(Kerekpar2.Vazmeretek._14, Kerekpar2.Markak.Cannondale);
+            
+            Console.WriteLine(kerekpar0.ToString());
             Console.WriteLine(kerekpar1.ToString());
             Console.WriteLine(kerekpar2.ToString());
         }
