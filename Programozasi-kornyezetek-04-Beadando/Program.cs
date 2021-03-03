@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * Fábián Gábor
+ * CXNU8T
+ * https://github.com/FabianGabor/Programozasi-kornyezetek-04-Beadando
+ */
+
+using System;
 using System.Collections;
 using System.Linq;
 using System.Text;
