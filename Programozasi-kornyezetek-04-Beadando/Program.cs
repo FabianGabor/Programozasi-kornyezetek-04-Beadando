@@ -166,11 +166,63 @@ namespace Programozasi_kornyezetek_04_Beadando {
             Console.WriteLine(LegnepszerubbNapok());
         }
     }
+    
+    // 3. Készíts struktúrát kerékpár adatainak a tárolására: vázméret (12,14,16,20 felsoroltak valamelyike),
+    // márka, ár! Készíts konstruktort, az árat tulajdonsággal határozd meg! Készíts ToString-et a jellemzők
+    // leírására!
+    class Kerekpar {
+        internal enum Vazmeretek { _12 = 12, _14 = 14, _16 = 16, _18 = 18, _20 = 20 };
+        internal enum Markak { Cannondale, Trek, Giant, Specialized, Merida, Scott};
+
+        private Vazmeretek Vazmeret { get; }
+
+        private Markak Marka { get; }
+
+        private int Ar { get; }
+
+        private static int SetAr(Markak marka) {
+            switch (marka) {
+                case Markak.Cannondale: { return 300000; }
+                case Markak.Trek: { return 250000; }
+                case Markak.Giant: { return 220000; }
+                case Markak.Specialized: { return 270000; }
+                case Markak.Merida: { return 260000; }
+                case Markak.Scott: { return 280000; }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(marka), marka, "Nem valaszthato marka!");
+            }
+        }
+        public Kerekpar(Vazmeretek vazmeret, string marka) {
+            Vazmeret = vazmeret;
+            if(Enum.TryParse<Markak>(marka, out var result))
+                Marka = result;
+            else
+                throw new ArgumentOutOfRangeException(nameof(marka), marka, "Nem valaszthato marka!");
+
+            Ar = SetAr(Marka);
+        }
+
+        public Kerekpar(Vazmeretek vazmeret, Markak marka) {
+            Vazmeret = vazmeret;
+            Marka = marka;
+            Ar = SetAr(Marka);
+        }
+
+        public override string ToString() {
+            return "Marka:    " + Marka + "\n" +
+                   "Vazmeret: " + (int) Vazmeret + "\n" +
+                   "Ar:       " + Ar + "\n";
+        }
+    }
 
     internal class Program {
         public static void Main(string[] args) {
             //Kartya.RunKartya();
-            Ceg.RunCeg();
+            //Ceg.RunCeg();
+            Kerekpar kerekpar1 = new Kerekpar(Kerekpar.Vazmeretek._18, Kerekpar.Markak.Merida);
+            Kerekpar kerekpar2 = new Kerekpar(Kerekpar.Vazmeretek._16, "Specialized");
+            Console.WriteLine(kerekpar1.ToString());
+            Console.WriteLine(kerekpar2.ToString());
         }
     }
 }
